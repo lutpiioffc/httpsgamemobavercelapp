@@ -1,0 +1,86 @@
+import zipfile
+import os
+
+# Create DIMZ-LEGENDS MOBA 5v5 3D Online Multiplayer Project ZIP package
+index_html = """<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DIMZ LEGENDS — 5v5 Multiplayer MOBA 3D</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.7.2/dist/socket.io.min.js"></script>
+</head>
+<body>
+    <div id="game-container"></div>
+
+    <!-- MAIN MENU OVERLAY -->
+    <div id="main-menu" class="screen-overlay">
+        <div class="menu-top-bar">
+            <div class="user-profile-badge" id="open-profile-btn">
+                <div class="avatar-ring"><i class="fa-solid fa-user-ninja"></i></div>
+                <div>
+                    <strong id="ui-username">DimzLegend</strong>
+                    <small>Mythic ⭐ 45</small>
+                </div>
+            </div>
+            <div class="currencies">
+                <div class="curr-pill"><i class="fa-solid fa-coins text-amber-400"></i> <span id="ui-gold">12,450</span></div>
+                <div class="curr-pill"><i class="fa-solid fa-gem text-cyan-400"></i> <span id="ui-diamonds">850</span></div>
+                <button id="settings-btn" class="icon-btn"><i class="fa-solid fa-gear"></i></button>
+            </div>
+        </div>
+
+        <div class="menu-center">
+            <div class="game-logo-box">
+                <span class="sub-badge">5V5 REAL-TIME MULTIPLAYER MOBA</span>
+                <h1 class="game-logo">DIMZ <span>LEGENDS</span></h1>
+            </div>
+
+            <div class="hero-showcase-card">
+                <div class="hero-info">
+                    <span class="role-tag" id="selected-hero-role">ASSASSIN / FIGHTER</span>
+                    <h2 id="selected-hero-name">Shadow Blade</h2>
+                    <p id="selected-hero-desc">Ahli penyergapan kilat dengan mobilitas tinggi dan burst damage mematikan.</p>
+                </div>
+                <button id="change-hero-btn" class="secondary-btn"><i class="fa-solid fa-shuffle"></i> Ganti Hero</button>
+            </div>
+        </div>
+
+        <div class="menu-footer-bar">
+            <div class="mode-selector">
+                <button class="mode-card active" data-mode="ranked">
+                    <i class="fa-solid fa-trophy"></i>
+                    <div><b>Ranked 5v5</b><small>Epic - Mythic</small></div>
+                </button>
+                <button class="mode-card" data-mode="classic">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <div><b>Classic Match</b><small>Santai & Latihan</small></div>
+                </button>
+                <button class="mode-card" data-mode="custom">
+                    <i class="fa-solid fa-users"></i>
+                    <div><b>Custom Room</b><small>Main Bareng Teman</small></div>
+                </button>
+            </div>
+            <button id="start-matchmaking-btn" class="play-btn">
+                <i class="fa-solid fa-play"></i>
+                <span>MULAI PERTEMPURAN</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- HERO SELECTION MODAL -->
+    <div id="hero-modal" class="modal-overlay hidden">
+        <div class="modal-card wide">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-shield-cat"></i> PILIH HERO ANDALAN (10 HERO)</h3>
+                <button id="close-hero-modal" class="close-btn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="hero-grid" id="hero-grid"></div>
+            </div>
+        </div>
+    </div>
